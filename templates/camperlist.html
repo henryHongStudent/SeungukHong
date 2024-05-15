@@ -1,7 +1,22 @@
-{% extends "base.html" %}
-{% block content %}
-<h2>Selwyn Campground - Camper List</h2>
+{% extends "base.html" %} {% block content %}
+<!-- code in here to display a list of books-->
 
-<!-- Insert code to loop over the list of campers and display them -->
-
+<table>
+  <tr>
+    <th>Customer ID</th>
+    <th>Customer Name</th>
+    <th>Booking Date</th>
+    <th>Site</th>
+    <th>Occupancy</th>
+  </tr>
+  {% for data in camperList %}
+  <tr>
+    <td>{{data[2]}}</td>
+    <td>{{data[5]+data[6]}}</td>
+    <td>{{data[3]}}</td>
+    <td>{{data[1]}}</td>
+    <td>{{data[4]}}</td>
+  </tr>
+  {% endfor %}
+</table>
 {% endblock %}

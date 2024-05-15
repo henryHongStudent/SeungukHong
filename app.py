@@ -56,9 +56,20 @@ def booking():
         customerList = connection.fetchall()
         connection.execute("select * from sites where occupancy >= %s AND site_id not in (select site from bookings where booking_date between %s AND %s);",(occupancy,firstNight,lastNight))
         siteList = connection.fetchall()
+        print(type(siteList))
         return render_template("bookingform.html", customerlist = customerList, bookingdate=bookingDate, sitelist = siteList, bookingnights = bookingNights)    
 
 @app.route("/booking/add", methods=['POST'])
 def makebooking():
     print(request.form)
     pass
+
+@app.route("/camperlist", methods=['GET'])
+def camperList():
+    if request.method == "GET":
+        connection = getCursor()
+        connection.execute("SELECT scg.bookings.*, scg.customers.firstname, scg.customers.familyname FROM scg.bookings INNER JOIN scg.customers ON scg.bookings.customer = scg.customers.customer_id; ")
+        camperList=connection.fetchall()
+        print(type(camperList))
+        return render_template("camperlist.html", camperList = camperList)
+        # return camperList
