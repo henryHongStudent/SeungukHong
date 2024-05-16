@@ -13,6 +13,7 @@ import connect
 
 app = Flask(__name__)
 
+
 dbconn = None
 connection = None
 
@@ -57,19 +58,60 @@ def booking():
         connection.execute("select * from sites where occupancy >= %s AND site_id not in (select site from bookings where booking_date between %s AND %s);",(occupancy,firstNight,lastNight))
         siteList = connection.fetchall()
         print(type(siteList))
-        return render_template("bookingform.html", customerlist = customerList, bookingdate=bookingDate, sitelist = siteList, bookingnights = bookingNights)    
+        return render_template("bookingform.html", customerlist = customerList, bookingdate=bookingDate, sitelist = siteList, bookingnights = bookingNights,occupancy= occupancy)    
 
 @app.route("/booking/add", methods=['POST'])
 def makebooking():
-    print(request.form)
-    pass
-
+    if request.method == "POST":
+        bookingDate_String=request.form.get("bookingdate")
+        bookingDate_Obj=datetime.strptime(bookingDate_String, '%Y-%m-%d')
+        bookingDate=bookingDate_Obj.date()
+        customer=int(request.form.get("customer"))
+        site=request.form.get("site")
+        occupancy=int(request.form.get("occupancy"))
+        connection = getCursor()
+        connection.execute("INSERT INTO bookings (booking_date, customer, site, occupancy) VALUES (%s, %s, %s, %s);",(bookingDate,customer,site,occupancy))
+        connection.close()
+        return redirect(url_for('booking'))
+    
 @app.route("/camperlist", methods=['GET'])
 def camperList():
     if request.method == "GET":
         connection = getCursor()
-        connection.execute("SELECT scg.bookings.*, scg.customers.firstname, scg.customers.familyname FROM scg.bookings INNER JOIN scg.customers ON scg.bookings.customer = scg.customers.customer_id; ")
+        connection.execute("SELECT bookings.*, customers.firstname, customers.familyname FROM bookings INNER JOIN customers ON bookings.customer = customers.customer_id; ")
         camperList=connection.fetchall()
         print(type(camperList))
         return render_template("camperlist.html", camperList = camperList)
         # return camperList
+
+@app.route("/customer", methods=['GET','POST'])
+def customerList():
+    if request.method == "GET":
+        connection = getCursor()
+        connection.execute("SELECT * FROM customers;")
+        customerList = connection.fetchall()
+        return render_template("customer.html", customerlist = customerList)
+@app.route("/customer/add", methods=['POST','GET'])
+def addCustomer():
+    if request.method=="GET":
+        return render_template("addcustomer.html")
+    else :
+        firstname =request.form.get("firstname")
+        familyname = request.form.get("familyname")
+        email = request.form.get("email")
+        phone = request.form.get("phone")
+        connection = getCursor()
+        connection.execute("INSERT INTO customers (firstname, familyname, email, phone) VALUES (%s, %s, %s, %s);",(firstname,familyname,email,phone))
+        connection.close()
+        return redirect(url_for('customerList'))
+            
+@app.route("/customer/result", methods=['GET'])    
+def searchResult():
+    if request.method == "GET":
+        searchString = request.args.get("search").capitalize()
+        connection = getCursor()
+        connection.execute("SELECT * FROM customers WHERE firstname LIKE %s OR familyname LIKE %s OR customer_id LIKE %s OR email LIKE %s OR phone LIKE %s ;",('%'+searchString+'%', '%'+searchString+'%','%'+searchString+'%','%'+searchString+'%','%'+searchString+'%'))
+        customerList = connection.fetchall()
+        return  render_template("customer.html", customerlist = customerList)
+
+
