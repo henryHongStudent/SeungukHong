@@ -3,6 +3,7 @@ from flask import render_template
 from flask import request
 from flask import redirect
 from flask import url_for
+from flask import flash #notice this is for flashing messages
 import re
 from datetime import datetime
 from datetime import date
@@ -114,4 +115,25 @@ def searchResult():
         customerList = connection.fetchall()
         return  render_template("customer.html", customerlist = customerList)
 
-
+@app.route("/customer/update?customer_id=<customer_id>", methods=['POST','GET'])
+def updateCustomer(customer_id):
+    if request.method=="GET":
+        connection = getCursor()
+        connection.execute("SELECT * FROM customers WHERE customer_id = %s;",(customer_id,))
+        selectedCustomer = connection.fetchone()
+        return render_template("updatecustomer.html",customer_id=selectedCustomer[0], firstname = selectedCustomer[1], familyname = selectedCustomer[2], email = selectedCustomer[3], phone = selectedCustomer[4])
+    else:
+        customer_id = request.form.get("customer_id")
+        firstname =request.form.get("firstname")
+        familyname = request.form.get("familyname")
+        email = request.form.get("email")
+        phone = request.form.get("phone")
+        connection = getCursor()
+        connection.execute("UPDATE customers SET firstname = %s, familyname = %s, email = %s, phone = %s WHERE customer_id = %s;",(firstname,familyname,email,phone,customer_id))
+        connection.close()
+        return redirect(url_for('customerList'))
+    
+    
+    
+if __name__ == '__main__':
+    app.run(debug=True)

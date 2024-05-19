@@ -8,7 +8,7 @@
     <input type="submit">
     </form>
     
-    <button><a a href="{{ url_for('addCustomer') }}">ADD CUSTOMER</a></button> 
+    <input><a href="{{ url_for('addCustomer') }}">ADD CUSTOMER</a></input> 
     
 
     <table>
@@ -17,7 +17,9 @@
           <th>Customer Name</th>
           <th>Email</th>
           <th>Contact</th>
-    
+          <th>Edit</th>
+      
+          
         </tr>
         {% for data in customerlist %}
         <tr>
@@ -25,7 +27,10 @@
           <td>{{data[1]+" "+data[2]}}</td>
           <td>{{data[3]}}</td>
           <td>{{data[4]}}</td>  
+          <td><a href="{{ url_for('updateCustomer', customer_id=data[0]) }}">Update</a></td>
+         
         </tr>
+
         {%endfor%}
       </table>
     

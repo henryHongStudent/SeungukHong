@@ -13,13 +13,27 @@
   </head>
 
   <body>
-    <nav>
-      <h1>Selwyn Campground</h1>
-      <ul>
-        <li><a href="{{ url_for('booking') }}">Make Booking</a></li>
-        <li><a href="{{ url_for('camperList') }}">Camper List</a></li>
-        <li><a href="{{ url_for('customerList') }}">Customer List</a></li>
-      </ul>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Selwyn Campground</a>
+
+        <div
+          class="d-flex justify-content-between align-items-center w-100 bg-black"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a href="{{ url_for('booking') }}">Make Booking</a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ url_for('camperList') }}">Camper List</a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ url_for('customerList') }}">Customer List</a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </nav>
     <section class="content">
       <header>{% block header %}{% endblock %}</header>
