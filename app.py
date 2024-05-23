@@ -4,7 +4,7 @@ from flask import request
 from flask import redirect
 from flask import url_for
 from flask import flash #notice this is for flashing messages
-import re
+
 from datetime import datetime
 from datetime import date
 from datetime import timedelta
@@ -40,6 +40,7 @@ def campers():
         connection = getCursor()
         connection.execute("SELECT * FROM bookings join sites on site = site_id inner join customers on customer = customer_id where booking_date= %s;",(campDate,))
         camperList = connection.fetchall()
+        connection.close()
         return render_template("datepickercamper.html", camperlist = camperList)
 
 @app.route("/booking", methods=['GET','POST'])
@@ -47,18 +48,20 @@ def booking():
     if request.method == "GET":
         return render_template("datepicker.html", currentdate = datetime.now().date())
     else:
+        
         bookingNights = request.form.get('bookingnights')
         bookingDate = request.form.get('bookingdate')
         occupancy = request.form.get('occupancy')
         firstNight = date.fromisoformat(bookingDate)
-
         lastNight = firstNight + timedelta(days=int(bookingNights))
+        
         connection = getCursor()
         connection.execute("SELECT * FROM customers;")
         customerList = connection.fetchall()
         connection.execute("select * from sites where occupancy >= %s AND site_id not in (select site from bookings where booking_date between %s AND %s);",(occupancy,firstNight,lastNight))
         siteList = connection.fetchall()
-        print(type(siteList))
+        connection.close()  
+
         return render_template("bookingform.html", customerlist = customerList, bookingdate=bookingDate, sitelist = siteList, bookingnights = bookingNights,occupancy= occupancy)    
 
 @app.route("/booking/add", methods=['POST'])
@@ -81,7 +84,7 @@ def camperList():
         connection = getCursor()
         connection.execute("SELECT bookings.*, customers.firstname, customers.familyname FROM bookings INNER JOIN customers ON bookings.customer = customers.customer_id; ")
         camperList=connection.fetchall()
-        print(type(camperList))
+        connection.close() 
         return render_template("camperlist.html", camperList = camperList)
         # return camperList
 
@@ -91,6 +94,7 @@ def customerList():
         connection = getCursor()
         connection.execute("SELECT * FROM customers;")
         customerList = connection.fetchall()
+        connection.close() 
         return render_template("customer.html", customerlist = customerList)
 @app.route("/customer/add", methods=['POST','GET'])
 def addCustomer():
@@ -113,6 +117,7 @@ def searchResult():
         connection = getCursor()
         connection.execute("SELECT * FROM customers WHERE firstname LIKE %s OR familyname LIKE %s OR customer_id LIKE %s OR email LIKE %s OR phone LIKE %s ;",('%'+searchString+'%', '%'+searchString+'%','%'+searchString+'%','%'+searchString+'%','%'+searchString+'%'))
         customerList = connection.fetchall()
+        connection.close() 
         return  render_template("customer.html", customerlist = customerList)
 
 @app.route("/customer/update?customer_id=<customer_id>", methods=['POST','GET'])
@@ -133,7 +138,26 @@ def updateCustomer(customer_id):
         connection.close()
         return redirect(url_for('customerList'))
     
-    
-    
-if __name__ == '__main__':
+
+
+@app.route("/report", methods=['GET'])
+def report():
+    if request.method == "GET":
+        connection = getCursor()
+        connection.execute('''SELECT 
+                                CONCAT(customers.firstname, ' ', customers.familyname) AS Customer_Name,
+                                COUNT(*) AS Total_booking,
+                                AVG(bookings.occupancy) AS avg_occupancy
+                            FROM 
+                                bookings
+                            INNER JOIN 
+                                customers ON bookings.customer = customers.customer_id
+                            GROUP BY 
+                                CONCAT(customers.firstname, ' ', customers.familyname);''')
+        
+        report = connection.fetchall()
+        connection.close() 
+        return render_template("report.html", report = report)
+
+if __name__ == '__main__': 
     app.run(debug=True)

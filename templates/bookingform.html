@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>Selwyn Campground - Make a booking</h2>
+<h2 class="bg-black">Selwyn Campground - Make a booking</h2>
 <p>
 <form action="/booking/add" method="POST">
 <label for="bookingdate">Start Date to be booked</label>
@@ -9,13 +9,14 @@
 <br>
 <input type="hidden" name="bookingnights" value="{{bookingnights}}"/>
 <input type="text" name="occupancy" value="{{occupancy}}"/>
-<label for="customer">Customer to book for</label>
+<label for="customer">Customer to book foddddd</label>
 <select name="customer">
     {% for customer in customerlist %} 
     <option value="{{customer[0]}}">{{customer[1]}} {{customer[2]}}</option>
     {% endfor %}
 </select><br>
 <label for="site">Site to select</label><br>
+<button type="button" class="btn btn-primary">Primary</button>
 <!-- radio button loop -->
 {% for site in sitelist %}
 
