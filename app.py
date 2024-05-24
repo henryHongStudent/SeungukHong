@@ -160,4 +160,5 @@ def report():
         return render_template("report.html", report = report)
 
 if __name__ == '__main__': 
+    
     app.run(debug=True)
