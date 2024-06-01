@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2 class="bg-black">Selwyn Campground - Make a booking</h2>
+<div class="container w-100 p-0 mt-3 text-center"> 
+    <div class="justify-content-center">
+<h2 class="bg-body-secondary">Selwyn Campground - Make a booking</h2>
 <p>
 <form action="/booking/add" method="POST">
 <label for="bookingdate">Start Date to be booked</label>
@@ -27,5 +29,6 @@
 <br>
 <input type="submit"/>
 </form>
-
+</div>
+</div>
 {% endblock %}
