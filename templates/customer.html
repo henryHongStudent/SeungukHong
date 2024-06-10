@@ -1,39 +1,48 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
+
+<div class="p-1 w-full h-25  text-center my-3">
+
+</div>
 
 
-<form action="/customer/result" method="GET">
-    <lable for="search">Search</label>
-    <input type="text" name="search">
-    <input type="submit">
-    </form>
-    
-    <input><a href="{{ url_for('addCustomer') }}">ADD CUSTOMER</a></input> 
-    
 
-    <table>
-        <tr>
-          <th>Customer ID</th>
-          <th>Customer Name</th>
-          <th>Email</th>
-          <th>Contact</th>
-          <th>Edit</th>
-      
-          
-        </tr>
-        {% for data in customerlist %}
-        <tr>
-          <td>{{data[0]}}</td>
-          <td>{{data[1]+" "+data[2]}}</td>
-          <td>{{data[3]}}</td>
-          <td>{{data[4]}}</td>  
-          <td><a href="{{ url_for('updateCustomer', customer_id=data[0]) }}">Update</a></td>
-         
-        </tr>
+<div class="container mt-3 shadow-lg p-0 rounded">
+  <div>
+    <h2 class="m-3">Search Customer</h1>
 
-        {%endfor%}
-      </table>
-    
+      <form action="/customer/result" method="GET" class="w-full  d-flex justify-content-center align-items-center gap-2">
+        <input type="text" name="search" class="w-75 h-full" />
+        <button type="submit" class="btn btn-secondary"><i class="bi bi-search"></i></button>
+      </form>
+  </div>
+  <div class="text-end p-2">
+  <button class="btn btn-primary">
+    <a href="{{ url_for('addCustomer') }}" class="text-white text-decoration-none"
+      >ADD CUSTOMER</a>
+  </button>
+</div>
+  <table class="table text-center table-hover ">
+    <thead class="table-primary">
+    <tr>
+    <th>Customer ID</th>
+    <th>Customer Name</th>
+    <th>Email</th>
+    <th>Contact</th>
+    <th>Edit</th>
+  </tr>
+</thead>
+  {% for data in customerlist %}
+  <tr>
+    <td class="align-middle">{{data[0]}}</td>
+    <td  class="align-middle">{{data[1]+" "+data[2]}}</td>
+    <td  class="align-middle">{{data[3]}}</td>
+    <td  class="align-middle">{{data[4]}}</td>
+    <td  class="align-middle">
+      <button class="btn btn-warning"><a class="text-decoration-none text-black" href="{{ url_for('updateCustomer', customer_id=data[0]) }}">Update</a></button>
+    </td>
+  </tr>
 
-      
+  {%endfor%}
+</table>
+
 {% endblock %}
