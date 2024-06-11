@@ -4,33 +4,47 @@
   <form
     action="/customer/add"
     method="POST"
-    class="d-flex flex-column align-items-center needs-validation"
+    class="d-flex flex-column align-items-center needs-validation was-validated"
     novalidate
   >
     <div class="form-group m-2 p-2 w-50">
       <label for="firstname">First Name:</label>
       <input type="text" name="firstname" class="form-control" required />
-      <p class="invalid-feedback">Please enter First Name.</p>
+      <p class="invalid-feedback">Please enter First Name.</p> {# data validation #}
     </div>
 
     <div class="form-group m-2 p-2 w-50">
       <label for="familyname">Family Name:</label>
       <input type="text" name="familyname" class="form-control" required />
-      <p class="invalid-feedback">Please enter Family Name.</p>
+
+      <p class="invalid-feedback">Please enter Family Name.</p> {# data validation #}
     </div>
 
-    <div class="form-group m-2 p-2 w-50 has-validation">
+    <div class="form-group m-2 p-2 w-50">
       <label for="email">Email:</label>
       <input type="email" name="email" class="form-control" required />
 
-      <p class="invalid-feedback">email</p>
+      <p class="invalid-feedback">
+        Please enter correct email format. ex: xxx@xxx.com or .co {# data validation #}
+      </p>
     </div>
 
     <div class="form-group m-2 p-2 w-50">
       <label for="phone">Phone:</label>
-      <input type="number" name="phone" class="form-control" required />
-
-      <p class="invalid-feedback">phone</p>
+      <input
+        type="text"
+        name="phone"
+        class="form-control is-invalid"
+        required
+      />
+      {%if phone_error_message %} 
+      {#if there is phone error message,display message, if not show defalut message #}
+      <p class="invalid-feedback">{{phone_error_message}}</p>
+      {% else %}
+      <p class="invalid-feedback">
+        Please enter correct phone number format ex: length 9~10 only numbers.
+      </p>
+      {%endif%}
     </div>
 
     <div class="form-group m-2 p-2 w-50">

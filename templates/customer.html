@@ -2,16 +2,12 @@
 
 <div class="p-1 w-full h-25  text-center my-3">
 
-</div>
-
 
 
 <div class="container mt-3 shadow-lg p-0 rounded">
   <div class="text-center p-2">
     <h2 class="m-3">Search Customer</h1>
-
       <form action="/customer/result" method="GET" class="w-full  d-flex justify-content-center align-items-center gap-2 needs-validation" novalidate>
-
         <div class="w-75 form-group position-relative">
           <div class="input-group">
               <input type="text" name="search" class="form-control" required />
@@ -20,16 +16,18 @@
                 Please Enter Customer Name.
             </p>
           </div>
-     
       </div>
       </form>
   </div>
   <div class="text-end p-2">
   <button class="btn btn-primary">
-    <a href="{{ url_for('addCustomer') }}" class="text-white text-decoration-none"
+    <a href="{{ url_for('addCustomer') }}" class="text-white text-decoration-none" 
+    {#remove default a elements style for better design #}
       >ADD CUSTOMER</a>
   </button>
 </div>
+
+
   <table class="table text-center table-hover ">
     <thead class="table-primary">
     <tr>
@@ -40,8 +38,9 @@
     <th>Action</th>
   </tr>
 </thead>
-{% if customerlist %}
-  {% for data in customerlist %}
+{% if customer %}
+{# If the customer exists in the database, display the customer information. #}
+  {% for data in customer %}
   <tr>
     <td class="align-middle">{{data[0]}}</td>
     <td  class="align-middle">{{data[1]+" "+data[2]}}</td>
@@ -53,9 +52,11 @@
   </tr>
 
   {%endfor%}
-  {% else %}
+  {# But if the customer does not exist, display "NOT FOUND" and redirect to the customer page. #}
+{%else%}
+ 
   <tr>
-    <td colspan="5" class="text-center"><h3>NOT FOUND.</h3><a href="{{url_for('customerList')}}">Back to List</a></td>
+    <td colspan="5" class="text-center"><h3>NOT FOUND.</h3><a href="{{url_for('customerList')}}" class="text-decoration-none text-white bg-primary p-1 rounded-3">Back to List</a></td>
   </tr>
  
   {% endif%}

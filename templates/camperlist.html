@@ -2,7 +2,13 @@
 <!-- code in here to display a list of books-->
 
 <div class="container mt-5 shadow-lg p-0 rounded">
+  <div class="m-3 p-3 text-center">
+    <h2>Camper List</h1>
+  </div>
+
+
   <table class="table text-center table-hover">
+    {# using hover effect on the table to track user action#}
     <thead class="table-primary">
       <tr>
         <th scope="col">Customer ID</th>
@@ -16,7 +22,7 @@
     <tbody>
       <tr>
         <td>{{data[2]}}</td>
-        <td>{{data[5]+" "+data[6]}}</td>
+        <td>{{data[5]+" "+data[6]}}</td> {# combine first name and family for display full name. #}
         <td>{{data[3]}}</td>
         <td>{{data[1]}}</td>
         <td>{{data[4]}}</td>

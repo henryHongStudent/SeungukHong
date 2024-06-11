@@ -17,21 +17,20 @@
   </head>
 
   <body>
+    {# Nav bar section #}
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      {# company name section#}
       <div class="container-fluid">
-        <a class="navbar-brand" href="{{url_for('home')}}"
-          >Selwyn Campground tests</a
-        >
+        <a class="navbar-brand" href="{{url_for('home')}}">Selwyn Campground</a>
 
+        {# navgation items section #}
         <div
           class="collapse navbar-collapse justify-content-center"
           id="navbarNav"
         >
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('booking') }}"
-                >Make Booking</a
-              >
+              <a class="nav-link" href="{{ url_for('booking') }}"> Booking</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('camperList') }}"
@@ -54,7 +53,22 @@
       <header>{% block header %}{% endblock %}</header>
       {% for message in get_flashed_messages() %}
       <div class="flash">{{ message }}</div>
-      {% endfor %} {% block content %}{% endblock %}
+      {% endfor %} {% block content %}
+
+      <div
+        class="shadow-lg vh-100 w-100 d-flex justify-content-center align-items-center"
+      >
+        <div
+          class="text-center h-75 w-75 shadow-lg rounded-4 bg-body-tertiary d-flex flex-column justify-content-center align-items-center"
+        >
+          <h1>Welcome to Selwyn Campground</h1>
+          <p class="m-4">
+            Start booking today for a wonderful camping journey with us!
+          </p>
+        </div>
+      </div>
+
+      {% endblock %}
     </section>
     <!-- JavaScript Bundle with Popper -->
     <script>

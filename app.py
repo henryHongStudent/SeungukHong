@@ -1,29 +1,22 @@
 from flask import Flask
 from flask import render_template
 from flask import request
-from flask import redirect
-from flask import url_for
-from flask import flash #notice this is for flashing messages
-
 from datetime import datetime
 from datetime import date
 from datetime import timedelta
 import mysql.connector
 from mysql.connector import FieldType
 import connect
-import re
+import re   # this is for validate  and phone number
 app = Flask(__name__)
-
-
 dbconn = None
 connection = None
-emailvalidation=r'^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[A-Za-z]{2,}'
-phonevalidation=r'^\d{9,10}$'
+phonevalidation= re.compile(r'^\d{9,10}$') # This regex code validates phone numbers, accepting only 9 or 10 digits.
 def getCursor():
     global dbconn
     global connection
-    connection = mysql.connector.connect(user=connect.dbuser, \
-    password=connect.dbpass, host=connect.dbhost, \
+    connection = mysql.connector.connect(user=connect.dbuser, 
+    password=connect.dbpass, host=connect.dbhost, 
     database=connect.dbname, autocommit=True)
     dbconn = connection.cursor()
     return dbconn
@@ -32,18 +25,7 @@ def getCursor():
 def home():
     return render_template("base.html")
 
-@app.route("/campers", methods=['GET','POST'])
-def campers():
-    if request.method == "GET":
-        return render_template("datepickercamper.html", currentdate = datetime.now().date())
-    else:
-        campDate = request.form.get('campdate')
-        connection = getCursor()
-        connection.execute("SELECT * FROM bookings join sites on site = site_id inner join customers on customer = customer_id where booking_date= %s;",(campDate,))
-        camperList = connection.fetchall()
-        connection.close()
-        return render_template("datepickercamper.html", camperlist = camperList)
-
+#booking page 
 @app.route("/booking", methods=['GET','POST'])
 def booking():
     if request.method == "GET":
@@ -56,13 +38,13 @@ def booking():
         lastNight = firstNight + timedelta(days=int(bookingNights))
         connection = getCursor()
         connection.execute("SELECT * FROM customers;")
-        customerList = connection.fetchall()
+        customer = connection.fetchall()
         connection.execute("select * from sites where occupancy >= %s AND site_id not in (select site from bookings where booking_date between %s AND %s);",(occupancy,firstNight,lastNight))
         siteList = connection.fetchall()
         connection.close()  
+        return render_template("bookingform.html", customer = customer, bookingdate=bookingDate, sitelist = siteList, bookingnights = bookingNights,occupancy= occupancy)    
 
-        return render_template("bookingform.html", customerlist = customerList, bookingdate=bookingDate, sitelist = siteList, bookingnights = bookingNights,occupancy= occupancy)    
-
+#booking add page
 @app.route("/booking/add", methods=['POST'])
 def makebooking():
     if request.method == "POST":
@@ -74,66 +56,73 @@ def makebooking():
         occupancy=int(request.form.get("occupancy"))
         connection = getCursor()
         connection.execute("INSERT INTO bookings (booking_date, customer, site, occupancy) VALUES (%s, %s, %s, %s);",(bookingDate,customer,site,occupancy))
+        #Insert data to database.
         connection.close()
-        return redirect(url_for('booking'))
-    
+        return render_template("bookingconfirmation.html")
+
+#Display camper list page
 @app.route("/camperlist", methods=['GET'])
 def camperList():
     if request.method == "GET":
         connection = getCursor()
         connection.execute("SELECT bookings.*, customers.firstname, customers.familyname FROM bookings INNER JOIN customers ON bookings.customer = customers.customer_id; ")
-        camperList=connection.fetchall()
+        #The query joins the bookings and customers tables to retrieve information from both tables, including customer names.
+        camperList=connection.fetchall() # camperList stores the result of the fetchall.
         connection.close() 
-        return render_template("camperlist.html", camperList = camperList)
-        # return camperList
+        return render_template("camperlist.html", camperList = camperList) # send camperlist to camperlist.html as parameter.
+      
 
+#Display customer list page
 @app.route("/customer", methods=['GET','POST'])
 def customerList():
     if request.method == "GET":
         connection = getCursor()
         connection.execute("SELECT * FROM customers;")
-        customerList = connection.fetchall()
+        #The query selects all data from the customers table.
+        customer = connection.fetchall() # customer stores the result of the fetchall.
         connection.close() 
-        return render_template("customer.html", customerlist = customerList)
+        return render_template("customer.html", customer = customer) # send customer to customer.html as parameter.
+
+#Add customer page
 @app.route("/customer/add", methods=['POST','GET'])
 def addCustomer():
     if request.method=="GET":
         return render_template("addcustomer.html")
     else :
-        errors={}
         firstname =request.form.get("firstname")
         familyname = request.form.get("familyname")
         email = request.form.get("email")
-        if not re.match(emailvalidation,email):
-            errors["email_validation"]="Invalid Email format"
-
         phone = request.form.get("phone")
-        if not re.match(phonevalidation,phone):
-            errors["phone_validation"]="Invalid Phone format must be 9 or 10 digits"    
-        
-        if errors:
-            return render_template("addcustomer.html",errors=errors)
+        if not phonevalidation.match(phone): #If the phone number is not in the correct format, an error message will be displayed.
+            phone_error_message="Please enter correct phone number format ex: length 9~10 only numbers."
+            return render_template("addcustomer.html",phone_error_message=phone_error_message)
+            #send error message to addcustomer.html
         connection = getCursor()
         connection.execute("INSERT INTO customers (firstname, familyname, email, phone) VALUES (%s, %s, %s, %s);",(firstname,familyname,email,phone))
         connection.close()
-        return redirect(url_for('customerList'))
-            
+        return render_template("addcustomerconfirmation.html")
+
+#Display search result page
 @app.route("/customer/result", methods=['GET'])    
 def searchResult():
     if request.method == "GET":
-        searchString = request.args.get("search").capitalize()
+        searchString = request.args.get("search").capitalize() 
+        #Convert the search string to lowercase for case-insensitive searching.
         connection = getCursor()
         connection.execute("SELECT * FROM customers WHERE firstname LIKE %s OR familyname LIKE %s OR customer_id LIKE %s OR email LIKE %s OR phone LIKE %s ;",('%'+searchString+'%', '%'+searchString+'%','%'+searchString+'%','%'+searchString+'%','%'+searchString+'%'))
-        customerList = connection.fetchall()
+        customer = connection.fetchall()
         connection.close() 
-        return  render_template("customer.html", customerlist = customerList)
+        return  render_template("customer.html", customer = customer)
 
+#Update selected customer information page
 @app.route("/customer/update?customer_id=<customer_id>", methods=['POST','GET'])
 def updateCustomer(customer_id):
     if request.method=="GET":
         connection = getCursor()
         connection.execute("SELECT * FROM customers WHERE customer_id = %s;",(customer_id,))
+        #use customer_id to get one selected customer information.
         selectedCustomer = connection.fetchone()
+        #fetchone() return one selected customer information and store it in selectedCustomer.
         return render_template("updatecustomer.html",customer_id=selectedCustomer[0], firstname = selectedCustomer[1], familyname = selectedCustomer[2], email = selectedCustomer[3], phone = selectedCustomer[4])
     else:
         customer_id = request.form.get("customer_id")
@@ -144,10 +133,9 @@ def updateCustomer(customer_id):
         connection = getCursor()
         connection.execute("UPDATE customers SET firstname = %s, familyname = %s, email = %s, phone = %s WHERE customer_id = %s;",(firstname,familyname,email,phone,customer_id))
         connection.close()
-        return redirect(url_for('customerList'))
-    
+        return render_template("updatedcustomerconfirmation.html")    
 
-
+#Display report page
 @app.route("/report", methods=['GET'])
 def report():
     if request.method == "GET":
@@ -162,11 +150,9 @@ def report():
                                 customers ON bookings.customer = customers.customer_id
                             GROUP BY 
                                 CONCAT(customers.firstname, ' ', customers.familyname);''')
-        
+        #This query joins the bookings table and the customers table to calculate the total number of bookings and average occupancy for each customer, grouping the results 
+        # by the concatenated full name.
         report = connection.fetchall()
         connection.close() 
         return render_template("report.html", report = report)
 
-if __name__ == '__main__': 
-    
-    app.run(debug=True)

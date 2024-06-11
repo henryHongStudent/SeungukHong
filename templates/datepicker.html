@@ -3,85 +3,84 @@
 <div class="container w-100 p-0 mt-3 text-center">
   <div class="justify-content-center">
     <div class="mb-5">
-      <h1>Selwyn Campground</h1>
-    </div>
-    <div
-      class="container w-50 border rounded text-start p-0"
-      style="height: 80%"
-    >
-      <h2 class="text-center p-3 border-2 border-bottom bg-body-secondary">
-        Make a booking
-      </h2>
-      <form
-        action="{{url_for('booking')}}"
-        method="POST"
-        class="needs-validation"
-        novalidate
+      <div
+        class="container w-50 border rounded text-start p-0"
+        style="height: 80%"
       >
-        <div class="my-2 p-3">
-          <label for="bookingdate" class="form-label fw-bold fs-4 p-2 mb-2"
-            >Choose start night of booking</label
-          >
-          <input
-            type="date"
-            min="{{currentdate}}"
-            name="bookingdate"
-            class="form-control"
-            style="height: 60px"
-            required
-          />
-          <div class="invalid-feedback">
-            Please specify the number of nights.
+        <h2 class="text-center p-3 border-2 border-bottom bg-body-secondary">
+          Make a booking
+        </h2>
+        <form
+          action="{{url_for('booking')}}"
+          method="POST"
+          class="needs-validation"
+          novalidate
+        >
+          <div class="my-2 p-3">
+            <label for="bookingdate" class="form-label fw-bold fs-4 p-2 mb-2"
+              >Choose start night of booking</label
+            >
+            <input
+              type="date"
+              min="{{currentdate}}"
+              name="bookingdate"
+              class="form-control"
+              style="height: 60px"
+              required
+            />
+            <div class="invalid-feedback">
+              Please specify the number of nights.
+            </div>
           </div>
-        </div>
 
-        <div class="my-2 p-3">
-          <label for="bookingnights" class="form-label fw-bold fs-4 p-2 mb-2"
-            >Number of nights</label
-          >
-          <input
-            type="number"
-            name="bookingnights"
-            min="1"
-            max="5"
-            step="1"
-            class="form-control"
-            style="height: 60px"
-            required
-          />
-          <div class="invalid-feedback">
-            Please select the number of nights (MAX: 5, MIN: 1).
+          <div class="my-2 p-3">
+            <label for="bookingnights" class="form-label fw-bold fs-4 p-2 mb-2"
+              >Number of nights</label
+            >
+            <input
+              type="number"
+              name="bookingnights"
+              min="1"
+              max="5"
+              step="1"
+              class="form-control"
+              style="height: 60px"
+              required
+            />
+            <div class="invalid-feedback">
+              Please select the number of nights (MAX: 5, MIN: 1). {# data validation #}
+            </div>
           </div>
-        </div>
 
-        <div class="my-2 p-3">
-          <label for="occupancy" class="form-label fw-bold fs-4 p-2 mb-2"
-            >Number of people</label
-          >
-          <input
-            type="number"
-            name="occupancy"
-            min="1"
-            max="8"
-            step="1"
-            class="form-control"
-            style="height: 60px"
-            required
-          />
-          <div class="invalid-feedback">
-            Please select the number of people (MAX: 8, MIN: 1).
+          <div class="my-2 p-3">
+            <label for="occupancy" class="form-label fw-bold fs-4 p-2 mb-2"
+              >Number of people</label
+            >
+            <input
+              type="number"
+              name="occupancy"
+              min="1"
+              max="8"
+              step="1"
+              class="form-control"
+              style="height: 60px"
+              required
+            />
+            <div class="invalid-feedback">
+              Please select the number of people (MAX: 8, MIN: 1).{# data validation #}
+            </div>
           </div>
-        </div>
-        <div class="my-2 text-center">
-          <input
-            type="submit"
-            class="btn btn-primary btn-lg w-75 mb-2"
-            style="height: 60px"
-          />
-        </div>
-      </form>
+          <div class="my-2 text-center">
+            <input
+              type="submit"
+              class="btn btn-primary btn-lg w-75 mb-2"
+              style="height: 60px"
+            />
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-</div>
 
-{% endblock %}
+  {% endblock %}
+</div>

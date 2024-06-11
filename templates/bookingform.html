@@ -1,17 +1,20 @@
 {% extends "base.html" %} {% block content %}
 
-<div class="container w-50 shadow-lg mt-3 p-4 text-center">
-  <h2 class="bg-body-secondary">Selwyn Campground - Make a booking</h2>
-
+<div class="container w-50 shadow-lg mt-3 p-0 text-center rounded-top-3">
+    <div class="bg-body-tertiary ">
+        <h2 class="text-center w-100 p-3  border-2 border-bottom bg-body-secondary">
+            Selwyn Campground
+          </h2>
+    </div>
   <form
     action="/booking/add"
     method="POST"
     class="d-flex flex-column align-items-center"
   >
     <div
-      class="form-group m-2 p-2 w-50 d-flex flex-column w-50 gap-3 align-items-center"
+      class="form-group  p-2 w-50 d-flex flex-column w-50 gap-3 align-items-center"
     >
-      <label for="bookingdate">Start Date to be booked</label>
+      <label for="bookingdate">Start Date</label>
       <input
         type="text"
         enabled="false"
@@ -19,20 +22,24 @@
         value="{{bookingdate}}"
         class="form-control w-50"
         style="height: 40px"
+        readonly
       />
+      {#Using "readonly" to prevent the user from changing data from the previous page input.#}
     </div>
 
     <div
       class="form-group m-2 p-2 w-50 d-flex flex-column w-50 gap-3 align-items-center"
     >
-      <label for="bookingdate">Booking Night</label>
+      <label for="bookingdate">Booking Nights</label>
       <input
         type="hidden"
         name="bookingnights"
         value="{{bookingnights}}"
         class="form-control w-50"
         style="height: 40px"
+        readonly
       />
+      {# Using "readonly" to prevent the user from changing data from the previous page input. #}
     </div>
 
     <div
@@ -44,16 +51,18 @@
         value="{{occupancy}}"
         class="form-control w-50"
         style="height: 40px"
+        readonly
       />
+      {# Using "readonly" to prevent the user from changing data from the previous page input. #}
     </div>
     <div
       class="form-group m-2 p-2 w-50 d-flex flex-column w-50 gap-3 align-items-center"
     >
       <label for="customer">Customer Name </label>
       <select name="customer" class="form-control w-50" style="height: 40px">
-        {% for customer in customerlist %}
+        {% for customer in customer %}
         <option value="{{customer[0]}}">{{customer[1]}} {{customer[2]}}</option>
-        {% endfor %}
+        {% endfor %} {# Using a for loop, display all customer names as options in a select dropdown.#}
       </select>
     </div>
     <div
@@ -68,11 +77,12 @@
       >
         {% for site in sitelist %}
         <option value="{{site[0]}}">{{site[0]}} - {{site[1]}} occupancy</option>
-        {% endfor %}
+        {% endfor %} 
+        {# I decided to use the 'select' and 'option' elements fora better user interface instead of displaying the entire site list with radio buttons. #}
       </select>
     </div>
 
-    <div class="btn btn-primary mt-3">
+    <div class="btn btn-primary my-3">
       <button class="btn btn-primary" type="submit">Make a booking</button>
     </div>
   </form>
