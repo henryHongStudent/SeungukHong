@@ -1,18 +1,24 @@
 {% extends "base.html" %} {% block content %}
 <!-- code in here to display a list of books-->
 
-<table>
-  <tr>
-    <th>Customer Name</th>
-    <th>Total Booking Night</th>
-    <th>Average Occupancy</th>
-  </tr>
-  {% for data in report %}
-  <tr>
-    <td>{{data[0]}}</td>
-    <td>{{data[1]}}</td>
-    <td>{{data[2]}}</td>
-  </tr>
-  {% endfor %}
-</table>
-{% endblock %}
+<div class="container mt-5 shadow-lg p-0 rounded">
+  <table class="table text-center table-hover">
+    <thead class="table-primary">
+      <tr>
+        <th>Customer Name</th>
+        <th>Total Booking Night</th>
+        <th>Average Occupancy</th>
+      </tr>
+    </thead>
+    {% for data in report %}
+    <tbody>
+      <tr>
+        <td>{{data[0]}}</td>
+        <td>{{data[1]}}</td>
+        <td>{{data[2]}}</td>
+      </tr>
+    </tbody>
+    {% endfor %}
+  </table>
+  {% endblock %}
+</div>

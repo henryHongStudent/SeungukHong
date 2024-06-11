@@ -1,20 +1,66 @@
 {% extends "base.html" %} {% block content %}
 
-<form
-  action="{{url_for('updateCustomer',customer_id=customer_id)}}"
-  method="POST"
->
-  <label for="firstname">First Name: </label>
-  <input type="text" name="firstname" value="{{firstname}}" />
-  <label for="familyname">Family Name: </label>
-  <input type="text" name="familyname" value="{{familyname}}" />
-  <label for="email">Email: </label>
-  <input type="text" name="email" value="{{email}}" />
-  <label type="phone">Phone: </label>
-  <input type="text" name="phone" value="{{phone}}" />
-  <input type="hidden" name="customer_id" value="{{customer_id}}" />
+<div class="container w-50 shadow-lg mt-3 p-4 text-center">
+  <form
+    action="/customer/add"
+    method="POST"
+    class="d-flex flex-column align-items-center needs-validation"
+    novalidate
+  >
+    <div class="form-group m-2 p-2 w-50">
+      <label for="firstname">First Name:</label>
+      <input
+        type="text"
+        name="firstname"
+        class="form-control"
+        value="{{firstname}}"
+        required
+      />
+      <p class="invalid-feedback">Please enter First Name.</p>
+    </div>
 
-  <button type="submit">Update</button>
-</form>
+    <div class="form-group m-2 p-2 w-50">
+      <label for="familyname">Family Name:</label>
+      <input
+        type="text"
+        name="familyname"
+        class="form-control"
+        value="{{familyname}}"
+        required
+      />
+      <p class="invalid-feedback">Please enter Family Name.</p>
+    </div>
+
+    <div class="form-group m-2 p-2 w-50 has-validation">
+      <label for="email">Email:</label>
+      <input
+        type="email"
+        name="email"
+        class="form-control"
+        value="{{email}}"
+        required
+      />
+
+      <p class="invalid-feedback">email</p>
+    </div>
+
+    <div class="form-group m-2 p-2 w-50">
+      <label for="phone">Phone:</label>
+      <input
+        type="number"
+        name="phone"
+        class="form-control"
+        value="{{phone}}"
+        required
+      />
+
+      <p class="invalid-feedback">phone</p>
+    </div>
+
+    <div class="form-group m-2 p-2 w-50">
+      <button type="submit" class="btn btn-primary w-100">Update</button>
+    </div>
+  </form>
+</div>
 
 {% endblock %}

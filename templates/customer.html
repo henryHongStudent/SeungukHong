@@ -7,12 +7,21 @@
 
 
 <div class="container mt-3 shadow-lg p-0 rounded">
-  <div>
+  <div class="text-center p-2">
     <h2 class="m-3">Search Customer</h1>
 
-      <form action="/customer/result" method="GET" class="w-full  d-flex justify-content-center align-items-center gap-2">
-        <input type="text" name="search" class="w-75 h-full" />
-        <button type="submit" class="btn btn-secondary"><i class="bi bi-search"></i></button>
+      <form action="/customer/result" method="GET" class="w-full  d-flex justify-content-center align-items-center gap-2 needs-validation" novalidate>
+
+        <div class="w-75 form-group position-relative">
+          <div class="input-group">
+              <input type="text" name="search" class="form-control" required />
+              <button type="submit" class="btn btn-secondary rounded-end"><i class="bi bi-search"></i></button>
+              <p class="invalid-feedback">
+                Please Enter Customer Name.
+            </p>
+          </div>
+     
+      </div>
       </form>
   </div>
   <div class="text-end p-2">
@@ -28,9 +37,10 @@
     <th>Customer Name</th>
     <th>Email</th>
     <th>Contact</th>
-    <th>Edit</th>
+    <th>Action</th>
   </tr>
 </thead>
+{% if customerlist %}
   {% for data in customerlist %}
   <tr>
     <td class="align-middle">{{data[0]}}</td>
@@ -43,6 +53,12 @@
   </tr>
 
   {%endfor%}
+  {% else %}
+  <tr>
+    <td colspan="5" class="text-center"><h3>NOT FOUND.</h3><a href="{{url_for('customerList')}}">Back to List</a></td>
+  </tr>
+ 
+  {% endif%}
 </table>
 
 {% endblock %}

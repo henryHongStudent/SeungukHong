@@ -1,34 +1,80 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
-<div class="container w-100 p-0 mt-3 text-center"> 
-    <div class="justify-content-center">
-<h2 class="bg-body-secondary">Selwyn Campground - Make a booking</h2>
-<p>
-<form action="/booking/add" method="POST">
-<label for="bookingdate">Start Date to be booked</label>
-<input type="text" enabled="false" name="bookingdate" value="{{bookingdate}}"/>
-<br>
-<input type="hidden" name="bookingnights" value="{{bookingnights}}"/>
-<input type="text" name="occupancy" value="{{occupancy}}"/>
-<label for="customer">Customer to book foddddd</label>
-<select name="customer">
-    {% for customer in customerlist %} 
-    <option value="{{customer[0]}}">{{customer[1]}} {{customer[2]}}</option>
-    {% endfor %}
-</select><br>
-<label for="site">Site to select</label><br>
-<button type="button" class="btn btn-primary">Primary</button>
-<!-- radio button loop -->
-{% for site in sitelist %}
+<div class="container w-50 shadow-lg mt-3 p-4 text-center">
+  <h2 class="bg-body-secondary">Selwyn Campground - Make a booking</h2>
 
-<input type="radio" name="site" value="{{site[0]}}"> {{site[0]}} - {{site[1]}} occupancy </input><br>
+  <form
+    action="/booking/add"
+    method="POST"
+    class="d-flex flex-column align-items-center"
+  >
+    <div
+      class="form-group m-2 p-2 w-50 d-flex flex-column w-50 gap-3 align-items-center"
+    >
+      <label for="bookingdate">Start Date to be booked</label>
+      <input
+        type="text"
+        enabled="false"
+        name="bookingdate"
+        value="{{bookingdate}}"
+        class="form-control w-50"
+        style="height: 40px"
+      />
+    </div>
 
-{% endfor %}
+    <div
+      class="form-group m-2 p-2 w-50 d-flex flex-column w-50 gap-3 align-items-center"
+    >
+      <label for="bookingdate">Booking Night</label>
+      <input
+        type="hidden"
+        name="bookingnights"
+        value="{{bookingnights}}"
+        class="form-control w-50"
+        style="height: 40px"
+      />
+    </div>
 
-<br>
-<input type="submit"/>
-</form>
-</div>
+    <div
+      class="form-group m-2 p-2 w-50 d-flex flex-column w-50 gap-3 align-items-center"
+    >
+      <input
+        type="text"
+        name="occupancy"
+        value="{{occupancy}}"
+        class="form-control w-50"
+        style="height: 40px"
+      />
+    </div>
+    <div
+      class="form-group m-2 p-2 w-50 d-flex flex-column w-50 gap-3 align-items-center"
+    >
+      <label for="customer">Customer Name </label>
+      <select name="customer" class="form-control w-50" style="height: 40px">
+        {% for customer in customerlist %}
+        <option value="{{customer[0]}}">{{customer[1]}} {{customer[2]}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div
+      class="form-group m-2 p-2 w-50 d-flex flex-column w-50 align-items-center"
+    >
+      <label for="site">Site to select</label>
+      <select
+        name="site"
+        class="form-control w-50"
+        style="height: 40px"
+        required
+      >
+        {% for site in sitelist %}
+        <option value="{{site[0]}}">{{site[0]}} - {{site[1]}} occupancy</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="btn btn-primary mt-3">
+      <button class="btn btn-primary" type="submit">Make a booking</button>
+    </div>
+  </form>
 </div>
 {% endblock %}

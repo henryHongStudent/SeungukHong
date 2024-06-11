@@ -11,13 +11,14 @@ from datetime import timedelta
 import mysql.connector
 from mysql.connector import FieldType
 import connect
-
+import re
 app = Flask(__name__)
 
 
 dbconn = None
 connection = None
-
+emailvalidation=r'^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[A-Za-z]{2,}'
+phonevalidation=r'^\d{9,10}$'
 def getCursor():
     global dbconn
     global connection
@@ -47,14 +48,12 @@ def campers():
 def booking():
     if request.method == "GET":
         return render_template("datepicker.html", currentdate = datetime.now().date())
-    else:
-        
+    else:   
         bookingNights = request.form.get('bookingnights')
         bookingDate = request.form.get('bookingdate')
         occupancy = request.form.get('occupancy')
         firstNight = date.fromisoformat(bookingDate)
         lastNight = firstNight + timedelta(days=int(bookingNights))
-        
         connection = getCursor()
         connection.execute("SELECT * FROM customers;")
         customerList = connection.fetchall()
@@ -101,10 +100,19 @@ def addCustomer():
     if request.method=="GET":
         return render_template("addcustomer.html")
     else :
+        errors={}
         firstname =request.form.get("firstname")
         familyname = request.form.get("familyname")
         email = request.form.get("email")
+        if not re.match(emailvalidation,email):
+            errors["email_validation"]="Invalid Email format"
+
         phone = request.form.get("phone")
+        if not re.match(phonevalidation,phone):
+            errors["phone_validation"]="Invalid Phone format must be 9 or 10 digits"    
+        
+        if errors:
+            return render_template("addcustomer.html",errors=errors)
         connection = getCursor()
         connection.execute("INSERT INTO customers (firstname, familyname, email, phone) VALUES (%s, %s, %s, %s);",(firstname,familyname,email,phone))
         connection.close()

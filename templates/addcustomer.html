@@ -1,18 +1,42 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
-<form action="/customer/add" method="POST">
-<lable for="firstname">First Name: </label>
-<input type="text" name="firstname">
-<lable for="familyname">Family Name: </label>
-<input type="text" name="familyname">
-<lable for="email">Email: </label>
-<input type="text" name="email">
-<lable type="phone">Phone: </label>
-<input type="text" name="phone">
+<div class="container w-50 shadow-lg mt-3 p-4 text-center">
+  <form
+    action="/customer/add"
+    method="POST"
+    class="d-flex flex-column align-items-center needs-validation"
+    novalidate
+  >
+    <div class="form-group m-2 p-2 w-50">
+      <label for="firstname">First Name:</label>
+      <input type="text" name="firstname" class="form-control" required />
+      <p class="invalid-feedback">Please enter First Name.</p>
+    </div>
 
-<input type="submit"/>
-</form>
+    <div class="form-group m-2 p-2 w-50">
+      <label for="familyname">Family Name:</label>
+      <input type="text" name="familyname" class="form-control" required />
+      <p class="invalid-feedback">Please enter Family Name.</p>
+    </div>
 
+    <div class="form-group m-2 p-2 w-50 has-validation">
+      <label for="email">Email:</label>
+      <input type="email" name="email" class="form-control" required />
+
+      <p class="invalid-feedback">email</p>
+    </div>
+
+    <div class="form-group m-2 p-2 w-50">
+      <label for="phone">Phone:</label>
+      <input type="number" name="phone" class="form-control" required />
+
+      <p class="invalid-feedback">phone</p>
+    </div>
+
+    <div class="form-group m-2 p-2 w-50">
+      <button type="submit" class="btn btn-primary w-100">Submit</button>
+    </div>
+  </form>
+</div>
 
 {% endblock %}
