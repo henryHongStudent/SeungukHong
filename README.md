@@ -20,7 +20,7 @@ This design approach provides a comfortable experience for users. Additionally, 
  I used the same table style for the report page to ensure design consistency across all pages.
 
 ## Validation
- Form validation is implemented using Bootstrap's``` "required"``` attribute to ensure all fields are completed. The phone number field is validated on the server side using regular expressions to match New Zealand's phone number rules (9-10 digits). Because this rule can be customised to New Zealand's specific format, I decided to use server-side regular expressions for validation. If the input doesn't match the regex, an error message is shown.
+ Form validation is implemented using Bootstrap's ```"required"``` attribute to ensure all fields are completed. The phone number field is validated on the server side using regular expressions to match New Zealand's phone number rules (9-10 digits). Because this rule can be customised to New Zealand's specific format, I decided to use server-side regular expressions for validation. If the input doesn't match the regex, an error message is shown.
 ```
 phonevalidation= re.compile(r'^\d{9,10}$')
 if not phonevalidation.match(phone): 
