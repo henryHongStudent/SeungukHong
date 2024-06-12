@@ -4,23 +4,23 @@ Buttons and important information are highlighted in simple green or blue as wel
 This design approach provides a comfortable experience for users. Additionally, I aimed to create a clean and simple design, differentiating elements using neutral and other colours.**
 
 
-## Main Page:
-I centred the ```"welcome message card"``` with padding to create a modern and clean design. The main page features a navigation bar and a large central welcome message card. Clicking the company name at the top routes the user back to the main page, ensuring they can always return to the main screen. 
+## Main Page
+* I centred the ```"welcome message card"``` with padding to create a modern and clean design. The main page features a navigation bar and a large central welcome message card. Clicking the company name at the top routes the user back to the main page, ensuring they can always return to the main screen. 
 
-## Booking Page:
- This page uses a light grey background to header to indicate its purpose to users. The button is blue, contrasting with the neutral tones to make it easy to find. Instead of using radio buttons for selecting campsites, I decided to use a dropdown element for campsite selection to save space and maintain a consistent look with the customer name element.
+## Booking Page
+* This page uses a light grey background to header to indicate its purpose to users. The button is blue, contrasting with the neutral tones to make it easy to find. Instead of using radio buttons for selecting campsites, I decided to use a dropdown element for campsite selection to save space and maintain a consistent look with the customer name element.
 
-## Camper List:
-The camper list is displayed in a table format, which is ideal for showing information about many campers. The title "Camper List" at the top explains the page, and the table headers are in bold and light blue to separate them from the table body. All text is centre-aligned for better readability. I applied a hover effect with a dark grey background on table rows to enhance the user experience and clarity.
+## Camper List
+* The camper list is displayed in a table format, which is ideal for showing information about many campers. The title "Camper List" at the top explains the page, and the table headers are in bold and light blue to separate them from the table body. All text is centre-aligned for better readability. I applied a hover effect with a dark grey background on table rows to enhance the user experience and clarity.
 
-## Customer List:
-I decided to divide the page into three main sections: a search bar with a title at the top, an ```"Add Customer"``` button in the middle, and the customer table at the bottom. This structure is common in many customer management sites. The search bar includes a search icon and button to indicate its purpose, and the "Add Customer" button aligns with the table action row for consistency.
+## Customer List
+* I decided to divide the page into three main sections: a search bar with a title at the top, an ```"Add Customer"``` button in the middle, and the customer table at the bottom. This structure is common in many customer management sites. The search bar includes a search icon and button to indicate its purpose, and the "Add Customer" button aligns with the table action row for consistency.
 
-## Report:
-I used the same table style for the report page to ensure design consistency across all pages.
+## Report
+* I used the same table style for the report page to ensure design consistency across all pages.
 
-## Validation:
-Form validation is implemented using Bootstrap's``` "required"``` attribute to ensure all fields are completed. The phone number field is validated on the server side using regular expressions to match New Zealand's phone number rules (9-10 digits). Because this rule can be customised to New Zealand's specific format, I decided to use server-side regular expressions for validation. If the input doesn't match the regex, an error message is shown.
+## Validation
+* Form validation is implemented using Bootstrap's``` "required"``` attribute to ensure all fields are completed. The phone number field is validated on the server side using regular expressions to match New Zealand's phone number rules (9-10 digits). Because this rule can be customised to New Zealand's specific format, I decided to use server-side regular expressions for validation. If the input doesn't match the regex, an error message is shown.
 ```
 phonevalidation= re.compile(r'^\d{9,10}$')
 if not phonevalidation.match(phone): 
@@ -32,7 +32,7 @@ requried attribute
 <input type="text" name="firstname" class="form-control" required />
 ```
 ## Data conversion
-I decided to convert the booking date from a string to a datetime object and then to a date type, and also to convert the occupancy and customer input strings to integer types for data processing.
+* I decided to convert the booking date from a string to a datetime object and then to a date type, and also to convert the occupancy and customer input strings to integer types for data processing.
 ```
 bookingDate_String=request.form.get("bookingdate")
 bookingDate_Obj=datetime.strptime(bookingDate_String, '%Y-%m-%d')
@@ -42,23 +42,28 @@ site=request.form.get("site")
 occupancy=int(request.form.get("occupancy"))
 ```
 
-## Routes:
-I named server function to closely match URLs, making it easier for other developers to understand the code. The routing names are closely aligned with the URLs. For example, the server handler for ```"/customer"``` is named ```customerlist()```, which increases readability for other developers. URLs clearly indicate the request, such as ```"/customer/result"``` showing search results for customers.
+## Routes
+* I named server function to closely match URLs, making it easier for other developers to understand the code. The routing names are closely aligned with the URLs. For example, the server handler for ```"/customer"``` is named ```customerlist()```, which increases readability for other developers. URLs clearly indicate the request, such as ```"/customer/result"``` showing search results for customers.
 
-## Confirmation and Redirection:
-I included confirmation pages with redirection links to clearly indicate the server's response to user actions, enhancing the user experience. Responses to actions like customer bookings and information changes are shown on a confirmation page. Links for redirection to the main page are included, ensuring the server's response to user actions is clear and improving the user experience through confirmation.
+## Confirmation and Redirection
+* I included confirmation pages with redirection links to clearly indicate the server's response to user actions, enhancing the user experience. Responses to actions like customer bookings and information changes are shown on a confirmation page. Links for redirection to the main page are included, ensuring the server's response to user actions is clear and improving the user experience through confirmation.
 
-## Flex : 
-I decided to use the flex system in Bootstrap because many elements on this website need to be aligned with parent elements or other components. The attributes ```“d-flex,” “justify-content-center,” “align-items-center,” and “align-content-center”``` provide perfect alignment solutions.
+### Confirmation screen
+![20240612_154950](https://github.com/henryHongStudent/scg/assets/169408402/94e25cb3-a919-4290-8791-06dc4fba1e4d)
 
-## Get, Post:
-I used the GET and POST methods to read booking and customer data from the database, as well as to update or insert customer information into the database. These methods are standard practices for handling HTTP web requests.
-## Search : 
-To prevent search string errors, I decided to use the ```capitalize()``` method to convert lowercase strings.
+
+## Flex 
+* I decided to use the flex system in Bootstrap because many elements on this website need to be aligned with parent elements or other components. The attributes ```“d-flex,” “justify-content-center,” “align-items-center,” and “align-content-center”``` provide perfect alignment solutions.
+
+## Get, Post
+* I used the GET and POST methods to read booking and customer data from the database, as well as to update or insert customer information into the database. These methods are standard practices for handling HTTP web requests.
+
+## Search  
+* To prevent search string errors, I decided to use the ```capitalize()``` method to convert lowercase strings.
 
 ## SQL Query 
 
-I decided to combine the customer and booking tables to generate a new dataset for the report to average occupancy and total bookings per customer
+* I decided to combine the customer and booking tables to generate a new dataset for the report to average   occupancy and total bookings per customer
 
 ```
 SELECT CONCAT(customers.firstname, ' ', customers.familyname) AS Customer_Name,
@@ -76,14 +81,14 @@ CONCAT(customers.firstname, ' ', customers.familyname);
 //Using GROUP BY to group results by the customer full name
 ```
 ## For Loop
-To read processed data from the database in an HTML file, use a ```for loop``` to iterate over the data and display it. Additionally, using a ```for loop``` is a practical choice because it allows for easy access and processing of each item in the ```list data```.
+* To read processed data from the database in an HTML file, use a ```for loop``` to iterate over the data and display it. Additionally, using a ```for loop``` is a practical choice because it allows for easy access and processing of each item in the ```list data```.
 ```
  {% for customer in customer %}
  <option value="{{customer[0]}}">{{customer[1]}} {{customer[2]}}</option>
  {% endfor %}
 ```
 # Database Question
-## 1.   What SQL statement creates the customer table and defines its fields/columns? 
+### 1.What SQL statement creates the customer table and defines its fields/columns? 
 ```
 CREATE TABLE IF NOT EXISTS `customers` (
   `customer_id` INT NOT NULL AUTO_INCREMENT,
@@ -95,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
 );
 ```
 
-## 2.   Which line of SQL code sets up the relationship between the customer and booking tables?
+### 2.Which line of SQL code sets up the relationship between the customer and booking tables?
 
 ```
 CREATE TABLE IF NOT EXISTS `bookings` (
@@ -120,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `bookings` (
 );
 ```
 
-## 3.   Which lines of SQL code insert details into the sites table?
+### 3.Which lines of SQL code insert details into the sites table?
 
 ```
 INSERT INTO `sites` (`site_id`, `occupancy`) VALUES ('P1', '5');
@@ -135,7 +140,7 @@ INSERT INTO `sites` (`site_id`, `occupancy`) VALUES ('U4', '4');
 INSERT INTO `sites` (`site_id`, `occupancy`) VALUES ('U5', '2');
 ```
 
-## 4.   Suppose that as part of an audit trail, the time and date a booking was added to the database needed to be recorded. What fields/columns would you need to add to which tables? Provide the table name, new column name and the data type. (Do not implement this change in your app.)
+### 4.Suppose that as part of an audit trail, the time and date a booking was added to the database needed to be recorded. What fields/columns would you need to add to which tables? Provide the table name, new column name and the data type. (Do not implement this change in your app.)
 
 ```
 table name: Bookings
@@ -143,9 +148,9 @@ column name: CreatedAt
 data type: DATETIME
 ```
 
-## 5. Suppose the ability for customers to make their own bookings was added. Describe two different changes that would be needed to the data model to implement this. (Do not implement these changes in your app.)
+### 5.Suppose the ability for customers to make their own bookings was added. Describe two different changes that would be needed to the data model to implement this. (Do not implement these changes in your app.)
 
-I should create a new booking table for customers and build relationships with the original booking table using foreign keys.
+* I should create a new booking table for customers and build relationships with the original booking table using foreign keys.
 ```
 Create new table:  BookingFromCustomer
 BookingID-Foreign key to Booking table (INT)
@@ -154,9 +159,9 @@ SiteID, -Foreign key to Site table(INT)
 BookingDate – DATETIME 
 ```
 
-Also need to add authentication to customer table 
+* Also need to add authentication to customer table 
 ```
 Table: Customer
 Authentication – VARCHAR(50)
 ```
-So only customer who has authentication, can create booking and access.
+* So only customer who has authentication, can create booking and access.
