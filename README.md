@@ -1,42 +1,88 @@
 # Design Concept:
-**I chose a white background and simple colours to ensure elements are visible and users can easily identify important information. Buttons and important information are highlighted in simple green or blue as well. Key elements like forms and tables are placed in containers with shadows, making them distinct against the white background and allowing users to focus and identify them easily. This design approach provides a comfortable experience for users. Additionally, I aimed to create a clean and simple design, differentiating elements using neutral and other colours.**
+**I chose a white background and simple colours to ensure elements are visible and users can easily identify important information.
+Buttons and important information are highlighted in simple green or blue as well. Key elements like forms and tables are placed in containers with shadows, making them distinct against the white background and allowing users to focus and identify them easily. 
+This design approach provides a comfortable experience for users. Additionally, I aimed to create a clean and simple design, differentiating elements using neutral and other colours.**
 
 
 ## Main Page:
-I centred the welcome message card with padding to create a modern and clean design. The main page features a navigation bar and a large central welcome message card. Clicking the company name at the top routes the user back to the main page, ensuring they can always return to the main screen. 
+I centred the ```"welcome message card"``` with padding to create a modern and clean design. The main page features a navigation bar and a large central welcome message card. Clicking the company name at the top routes the user back to the main page, ensuring they can always return to the main screen. 
 
 ## Booking Page:
- This page uses a light grey background at the top to indicate its purpose to users. The button is blue, contrasting with the neutral tones to make it easy to find. Instead of using radio buttons for selecting campsites, I decided to use a dropdown element for campsite selection to save space and maintain a consistent look with the customer name element.
+ This page uses a light grey background to header to indicate its purpose to users. The button is blue, contrasting with the neutral tones to make it easy to find. Instead of using radio buttons for selecting campsites, I decided to use a dropdown element for campsite selection to save space and maintain a consistent look with the customer name element.
 
 ## Camper List:
 The camper list is displayed in a table format, which is ideal for showing information about many campers. The title "Camper List" at the top explains the page, and the table headers are in bold and light blue to separate them from the table body. All text is centre-aligned for better readability. I applied a hover effect with a dark grey background on table rows to enhance the user experience and clarity.
 
 ## Customer List:
-I decided to divide the page into three main sections: a search bar with a title at the top, an "Add Customer" button in the middle, and the customer table at the bottom. This structure is common in many customer management sites. The search bar includes a search icon and button to indicate its purpose, and the "Add Customer" button aligns with the table action row for consistency.
+I decided to divide the page into three main sections: a search bar with a title at the top, an ```"Add Customer"``` button in the middle, and the customer table at the bottom. This structure is common in many customer management sites. The search bar includes a search icon and button to indicate its purpose, and the "Add Customer" button aligns with the table action row for consistency.
 
 ## Report:
 I used the same table style for the report page to ensure design consistency across all pages.
 
 ## Validation:
-form validation is implemented using Bootstrap's "required" attribute to ensure all fields are completed. The phone number field is validated on the server side using regular expressions to match New Zealand's phone number rules (9-10 digits). Because this rule can be customised to New Zealand's specific format, I decided to use server-side regular expressions for validation. If the input doesn't match the regex, an error message is shown.
+Form validation is implemented using Bootstrap's``` "required"``` attribute to ensure all fields are completed. The phone number field is validated on the server side using regular expressions to match New Zealand's phone number rules (9-10 digits). Because this rule can be customised to New Zealand's specific format, I decided to use server-side regular expressions for validation. If the input doesn't match the regex, an error message is shown.
+```
+phonevalidation= re.compile(r'^\d{9,10}$')
+if not phonevalidation.match(phone): 
+   phone_error_message="Please enter correct phone number format ex: length 9~10 only numbers."
+   return render_template("addcustomer.html",phone_error_message=phone_error_message)
+```
+```
+requried attribute
+<input type="text" name="firstname" class="form-control" required />
+```
+## Data conversion
+I decided to convert the booking date from a string to a datetime object and then to a date type, and also to convert the occupancy and customer input strings to integer types for data processing.
+```
+bookingDate_String=request.form.get("bookingdate")
+bookingDate_Obj=datetime.strptime(bookingDate_String, '%Y-%m-%d')
+bookingDate=bookingDate_Obj.date()
+customer=int(request.form.get("customer"))
+site=request.form.get("site")
+occupancy=int(request.form.get("occupancy"))
+```
 
-## Router:
-I named server handlers to closely match URLs, making it easier for other developers to understand the code. The routing names are closely aligned with the URLs. For example, the server handler for "/customer" is named customerlist(), which increases readability for other developers. URLs clearly indicate the request, such as "/customer/result" showing search results for customers.
+## Routes:
+I named server function to closely match URLs, making it easier for other developers to understand the code. The routing names are closely aligned with the URLs. For example, the server handler for ```"/customer"``` is named ```customerlist()```, which increases readability for other developers. URLs clearly indicate the request, such as ```"/customer/result"``` showing search results for customers.
 
 ## Confirmation and Redirection:
 I included confirmation pages with redirection links to clearly indicate the server's response to user actions, enhancing the user experience. Responses to actions like customer bookings and information changes are shown on a confirmation page. Links for redirection to the main page are included, ensuring the server's response to user actions is clear and improving the user experience through confirmation.
 
 ## Flex : 
-I decided to use the flex system in Bootstrap because many elements on this website need to be aligned with parent elements or other components. The attributes “d-flex,” “justify-content-center,” “align-items-center,” and “align-content-center” provide perfect alignment solutions.
+I decided to use the flex system in Bootstrap because many elements on this website need to be aligned with parent elements or other components. The attributes ```“d-flex,” “justify-content-center,” “align-items-center,” and “align-content-center”``` provide perfect alignment solutions.
 
 ## Get, Post:
 I used the GET and POST methods to read booking and customer data from the database, as well as to update or insert customer information into the database. These methods are standard practices for handling HTTP web requests.
+## Search : 
+To prevent search string errors, I decided to use the ```capitalize()``` method to convert lowercase strings.
 
+## SQL Query 
 
+I decided to combine the customer and booking tables to generate a new dataset for the report to average occupancy and total bookings per customer
 
+```
+SELECT CONCAT(customers.firstname, ' ', customers.familyname) AS Customer_Name,
+//using CONCAT to make the full customer name.
+COUNT(*) AS Total_booking,
+AVG(bookings.occupancy) AS avg_occupancy 
+//Using AVG to calculate the average occupacy by customer.
+FROM 
+bookings
+INNER JOIN 
+customers ON bookings.customer = customers.customer_id
+// Using INNER JOIN to combine booking and customer information with customer ID
+GROUP BY 
+CONCAT(customers.firstname, ' ', customers.familyname);
+//Using GROUP BY to group results by the customer full name
+```
+## For Loop
+To read processed data from the database in an HTML file, use a ```for loop``` to iterate over the data and display it. Additionally, using a ```for loop``` is a practical choice because it allows for easy access and processing of each item in the ```list data```.
+```
+ {% for customer in customer %}
+ <option value="{{customer[0]}}">{{customer[1]}} {{customer[2]}}</option>
+ {% endfor %}
+```
 # Database Question
-
-
 ## 1.   What SQL statement creates the customer table and defines its fields/columns? 
 ```
 CREATE TABLE IF NOT EXISTS `customers` (
